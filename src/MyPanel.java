@@ -1,3 +1,9 @@
+// CIIC4010 Advanced Programming
+// Project 1 : MineSweeper RETRO
+//Jahn Carlo Marrero and Santos E. Medina
+// October/14/2016
+// 
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -10,14 +16,16 @@ public class MyPanel extends JPanel {
 	private static final int GRID_X = 25;
 	private static final int GRID_Y = 25;
 	private static final int INNER_CELL_SIZE = 29;
-	private static final int TOTAL_COLUMNS = 9;
-	private static final int TOTAL_ROWS = 9;   //Last row has only one cell
+	private static final int TOTAL_COLUMNS = 10;
+	private static final int TOTAL_ROWS = 10;   
 	public int x = -1;
 	public int y = -1;
 	public int mouseDownGridX = 0;
 	public int mouseDownGridY = 0;
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
-	public Number[][] numbersArray = new Number[TOTAL_COLUMNS][TOTAL_ROWS];
+	public Integer[][] numbersArray = new Integer[TOTAL_COLUMNS][TOTAL_ROWS];
+
+
 	public MyPanel() {   //This is the constructor... this code runs first to initialize
 		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
 			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
@@ -30,11 +38,13 @@ public class MyPanel extends JPanel {
 		}
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {   //The rest of the grid
 			for (int y = 0; y < TOTAL_ROWS; y++) {
-				colorArray[x][y] = Color.WHITE;
-				//numberArray[x][y] = Number.class
-				
-				
-			
+				colorArray[x][y] = Color.GRAY;
+			}
+		}
+
+		for (int i = 0; i < TOTAL_COLUMNS; i++){
+			for (int j = 0; j < TOTAL_ROWS; j++){
+				numbersArray[i][j] = 0;
 			}
 		}
 	}
@@ -54,26 +64,60 @@ public class MyPanel extends JPanel {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(x1, y1, width + 1, height + 1);
 
-		//Draw the grid minus the bottom row (which has only one cell)
+		//By default, the grid will be 10x10 (see above: TOTAL_COLUMNS and TOTAL_ROWS) 
 		g.setColor(Color.BLACK);
-		for (int y = 0; y <= TOTAL_ROWS ; y++) {
+		for (int y = 0; y <= TOTAL_ROWS; y++) {
 			g.drawLine(x1 + GRID_X, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)), x1 + GRID_X + ((INNER_CELL_SIZE + 1) * TOTAL_COLUMNS), y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)));
 		}
 		for (int x = 0; x <= TOTAL_COLUMNS; x++) {
-			g.drawLine(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS )));
+			g.drawLine(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS)));
 		}
-
-		//Draw an additional cell at the bottom left
-		//g.drawRect(x1 + GRID_X, y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS - 1)), INNER_CELL_SIZE + 1, INNER_CELL_SIZE + 1);
 
 		//Paint cell colors
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {
 			for (int y = 0; y < TOTAL_ROWS; y++) {
-					Color c = colorArray[x][y];
-					g.setColor(c);
-					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
+				Color c = colorArray[x][y];
+				g.setColor(c);
+				g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
 			}
 		}
+
+		//Show numbers all numbers
+		//		for (int x = 0; x < TOTAL_COLUMNS; x++) {
+		//			for (int y = 0; y < TOTAL_ROWS; y++) {
+		//				Integer d = numbersArray[x][y];
+		//				g.setColor(Color.GRAY);
+		//				g.drawString(String.valueOf(d),x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 29);
+		//			}
+		//		}
+
+
+		for (int x = 0; x < TOTAL_COLUMNS; x++) {
+			for (int y = 0; y < TOTAL_ROWS; y++) {
+				Integer d = numbersArray[x][y];
+				if (colorArray[x][y] == Color.WHITE){
+					g.setColor(Color.GRAY);
+
+					if (d > 0 && d < 9){
+						g.drawString(String.valueOf(d),x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + (29/2), y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 25);
+					}
+				}
+			}
+		}
+		
+		//Bomb Counter
+		int bombCounter = 0;
+		for (int x = 0; x < TOTAL_COLUMNS; x++) {
+			for (int y = 0; y < TOTAL_ROWS; y++) {
+				if (numbersArray[x][y] == 9){
+					bombCounter++;
+				}
+			}
+		}
+		
+		g.setColor(Color.BLACK);
+		g.drawString(String.valueOf(bombCounter) + " bombs", 300, 340);
+
 	}
 	public int getGridX(int x, int y) {
 		Insets myInsets = getInsets();
