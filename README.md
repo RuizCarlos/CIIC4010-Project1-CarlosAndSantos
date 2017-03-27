@@ -1,7 +1,5 @@
 CIIC4010-Project1-CarlosAndSantos
 
-MineSweeper recreation for firt proyect in advanced programming class
-
 THIS PROYECT WAS DONE FOR THE ADVANCED PROGRAMMING CLASS WITH JAVA IN THE UNIVERSITY OF PUERTO RICO @ MAYAGUEZ Contributors: Carlos Ruiz, Santos E. Medina,
 
 The rules of this game are simple: To start a new game, run the main file as a Java Application, To end the game early, just click on the X of the window.,
