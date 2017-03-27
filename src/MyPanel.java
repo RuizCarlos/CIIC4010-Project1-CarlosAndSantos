@@ -1,8 +1,7 @@
 // CIIC4010 Advanced Programming
 // Project 1 : MineSweeper RETRO
-//Jahn Carlo Marrero and Santos E. Medina
-// October/14/2016
-// 
+//Carlos Ruiz and Santos Medina
+// March/28/2017
 
 import java.awt.Color;
 import java.awt.Graphics;
